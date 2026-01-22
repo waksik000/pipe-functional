@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     id: 1,
     name: 'Wireless Mouse',
@@ -60,5 +60,3 @@ const data = [
     inStock: true,
   },
 ];
-
-export default data

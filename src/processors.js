@@ -1,38 +1,58 @@
 import pipe from './pipeline.js'
-import { filterByCategory, filterInStock} from './filters.js'
-import { mapToNames, mapToPriceWithTax } from './mappers.js';
+import { data } from './data.js'
+import { filterByCategory, filterInStock } from './filters.js'
+import { mapToNames, mapToPriceWithTax } from './mappers.js'
+import { groupByCategory, sumPrices } from './reducers.js'
 
+export const sortByPriceAsc = products => {
+  const sortedProducts = [...products]
 
-export const sortByPriceAsc = (products) => {
-    const sortedProducts = [...products]
+  sortedProducts.sort((a, b) => a.price - b.price)
 
-    sortedProducts.sort((a, b) => a.price - b.price)
+  return sortedProducts
+}
+export const sortByPriceDesc = products => {
+  const sortedProducts = [...products]
 
-    return sortedProducts
-};
-export const sortByPriceDesc = (products) => {
-    const sortedProducts = [...products]
+  sortedProducts.sort((a, b) => b.price - a.price)
 
-    sortedProducts.sort((a, b) => b.price - a.price)
-
-    return sortedProducts
-};
+  return sortedProducts
+}
 
 const products = [
-    { id: 1, name: "Laptop", price: 999 },
-    { id: 2, name: "Mouse", price: 25 },
-    { id: 3, name: "Monitor", price: 350 },
-    { id: 4, name: "Desk", price: 200 },
-    { id: 5, name: "Chair", price: 150 },
-    { id: 6, name: "Keyboard", price: 80 }
-];
+  { id: 1, name: 'Laptop', price: 999, inStock: true, category: 'Electronics' },
+  { id: 2, name: 'Mouse', price: 25, inStock: false, category: 'Electronics' },
+  {
+    id: 3,
+    name: 'Monitor',
+    price: 350,
+    inStock: true,
+    category: 'Electronics',
+  },
+  { id: 4, name: 'Desk', price: 200, inStock: false, category: 'Furniture' },
+  { id: 5, name: 'Chair', price: 150, inStock: true, category: 'Furniture' },
+  {
+    id: 6,
+    name: 'Keyboard',
+    price: 80,
+    inStock: false,
+    category: 'Electronics',
+  },
+]
 
 export const GetSortedNamesInStock = () => {
-    return pipe(
-        filterInStock,
-        mapToNames,
-        (names) => [...names].sort
-    )
+  return pipe(filterInStock, mapToNames, names => [...names].sort())
 }
-const result = GetSortedNamesInStock()(products)
-console.log(result)
+
+export const GetFiltredSortName = () => {
+  return pipe(
+    filterByCategory('Electronics'),
+    mapToPriceWithTax(0.15),
+    sortByPriceAsc,
+  )
+}
+
+export const ProductGroupWithSumPrice = () => {
+  return pipe(groupByCategory, sumPrices)
+}
+
