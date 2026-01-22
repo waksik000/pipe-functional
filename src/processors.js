@@ -56,3 +56,4 @@ export const ProductGroupWithSumPrice = () => {
   return pipe(groupByCategory, sumPrices)
 }
 
+// 1
